@@ -35,11 +35,11 @@ public class ApiGatewayToDynamoDBDemo {
 	private static Mapper mapper = Mapper.getMapper();
 
 	public static void main(String[] args) throws JsonProcessingException {
-		testAccount();
+		//testAccount();
 		System.out.println();
 		//testAccountHolder();
 		System.out.println();
-		//testTransaction();
+		testTransaction();
 	}
 
 	private static void testAccount() throws JsonProcessingException {
@@ -302,9 +302,9 @@ public class ApiGatewayToDynamoDBDemo {
 		System.out.println();
 		System.out.println();
 
-		String filterExpression = "receivingAccountNumber =:a and sendingAccountNumber =:b";
+		String filterExpression = "receivingAccountNumber =:a or sendingAccountNumber =:b";
 		AttributeJ listAttrs = new AttributeJ();
-		listAttrs.setA("400013412341234");
+		listAttrs.setA("400013412341235");
 		listAttrs.setB("400013412341235");
 		ListTransactionRequest lstAcctReq = new ListTransactionRequest(filterExpression, listAttrs);
 		stringPayload = mapper.writeValueAsString(lstAcctReq);

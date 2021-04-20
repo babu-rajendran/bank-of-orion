@@ -10,6 +10,7 @@ public class AccountHolder implements Item {
 	private String userRole;
 	private String holderStatus;
 	private String userName;
+	private String accountPass;
 
 	public String getDob() {
 		return dob;
@@ -75,11 +76,19 @@ public class AccountHolder implements Item {
 		this.userName = userName;
 	}
 
+	public String getAccountPass() {
+		return accountPass;
+	}
+
+	public void setAccountPass(String accountPass) {
+		this.accountPass = accountPass;
+	}
+
 	@Override
 	public String toString() {
 		return "AccountHolder [dob=" + dob + ", emailID=" + emailID + ", last4SSN=" + last4SSN + ", legalName="
 				+ legalName + ", phone=" + phone + ", userRole=" + userRole + ", holderStatus=" + holderStatus
-				+ ", userName=" + userName + "]";
+				+ ", userName=" + userName + ", accountPass=" + accountPass + "]";
 	}
 
 }
