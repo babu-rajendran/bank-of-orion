@@ -15,19 +15,19 @@ import java.util.Map;
 public class CognitoClient {
 
     private final AWSCognitoIdentityProvider client ;
-    private final String clientId = "CLIENT_ID";
-    private final String userPool = "USER_POOL_ID";
+    private final String clientId = "web_app_client";
+    private final String userPool = "5b3qq69pvjr41cfvqtl6esjoe2";
 
     public CognitoClient() {
         client = createCognitoClient();
     }
 
     private AWSCognitoIdentityProvider createCognitoClient() {
-        AWSCredentials cred = new BasicAWSCredentials("ACCESS_KEY", "SECRET_ACCESS_KEY");
+        AWSCredentials cred = new BasicAWSCredentials("AKIA5P2BY2CGABWEDPOY", "m5A0SWpx8g3ODoUlGFegX/bZsjUXydKEeYuU5Jw/");
         AWSCredentialsProvider credProvider = new AWSStaticCredentialsProvider(cred);
         return AWSCognitoIdentityProviderClientBuilder.standard()
                 .withCredentials(credProvider)
-                .withRegion(Regions.US_WEST_2)
+                .withRegion(Regions.US_EAST_1)
                 .build();
     }
 
