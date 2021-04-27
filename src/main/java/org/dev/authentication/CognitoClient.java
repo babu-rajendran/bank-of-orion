@@ -23,7 +23,7 @@ public class CognitoClient {
     }
 
     private AWSCognitoIdentityProvider createCognitoClient() {
-        AWSCredentials cred = new BasicAWSCredentials("AKIA5P2BY2CGABWEDPOY", "m5A0SWpx8g3ODoUlGFegX/bZsjUXydKEeYuU5Jw/");
+        AWSCredentials cred = new BasicAWSCredentials("accesskey", "password");
         AWSCredentialsProvider credProvider = new AWSStaticCredentialsProvider(cred);
         return AWSCognitoIdentityProviderClientBuilder.standard()
                 .withCredentials(credProvider)
