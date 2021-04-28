@@ -35,14 +35,14 @@ public class ApiGatewayToDynamoDBDemo {
 	private static Mapper mapper = Mapper.getMapper();
 
 	public static void main(String[] args) throws JsonProcessingException {
-		// testAccount();
+		createAccount("123456", "Checking", "hello@sjsu.edu", "Active", "1500");
 		System.out.println();
-		// testAccountHolder();
+		// createAccountHolder();
 		System.out.println();
 		testTransaction();
 	}
 
-	private static void testAccount(String accountNum, String accountType, String email, String accountStatus,
+	private static void createAccount(String accountNum, String accountType, String email, String accountStatus,
 			String accountBalance) throws JsonProcessingException {
 		OrionDBConnection connection = new OrionDBConnection();
 		PostDynamodbRequest request = new PostDynamodbRequest();
@@ -67,14 +67,69 @@ public class ApiGatewayToDynamoDBDemo {
 
 		System.out.println();
 		System.out.println();
+	}
+
+	private static void createAccountHolder(String accountNum, String accountType, String email, String dob, String SSN,
+			String accountStatus, String name, String userName, String userRole) throws JsonProcessingException {
+		OrionDBConnection connection = new OrionDBConnection();
+		PostDynamodbRequest request = new PostDynamodbRequest();
+		StringRequest strReq = new StringRequest();
+
+		// Create first account
+		AccountHolder acctHolder1 = new AccountHolder();
+		acctHolder1.setEmailID(email); // "123@test.com"
+		acctHolder1.setDob(dob); // "01/01/2000"
+		acctHolder1.setHolderStatus(accountStatus); // "Active"
+		acctHolder1.setLast4SSN(SSN); // "1234"
+		acctHolder1.setLegalName(name); // "Tester"
+		acctHolder1.setUserName(userName); // "tester01"
+		acctHolder1.setUserRole(userRole); // "Admin"
+		CreateAccountHolderRequest creatAcctReq1 = new CreateAccountHolderRequest(acctHolder1);
+		String stringPayload = mapper.writeValueAsString(creatAcctReq1);
+		System.out.println(stringPayload);
+
+		strReq.setPayload(stringPayload);
+		request.setStringRequest(strReq);
+		System.out.println(request);
+		PostDynamodbResult result = connection.post(request);
+		System.out.println(CreateResponseTransform.transformCreateResponse(result));
+
+		System.out.println();
+		System.out.println();
+	}
+
+	private static void testAccount() throws JsonProcessingException {
+		OrionDBConnection connection = new OrionDBConnection();
+		PostDynamodbRequest request = new PostDynamodbRequest();
+		StringRequest strReq = new StringRequest();
+
+		// Create checking account
+		Account acct = new Account();
+		acct.setAccountNumber("400013412341235");
+		acct.setAccountType("Checking");
+		acct.setBalance("1500");
+		acct.setEmailID("123@test.com");
+		acct.setAccountStatus("Active");
+		CreateAccountRequest creatAcctReq = new CreateAccountRequest(acct);
+		String stringPayload = mapper.writeValueAsString(creatAcctReq);
+		System.out.println(stringPayload);
+
+		strReq.setPayload(stringPayload);
+		request.setStringRequest(strReq);
+		System.out.println(request);
+		PostDynamodbResult result = connection.post(request);
+		System.out.println(CreateResponseTransform.transformCreateResponse(result));
+
+		System.out.println();
+		System.out.println();
 
 		// Create saving account
 		Account acct1 = new Account();
-		acct1.setAccountNumber(accountNum); // "400013412341236"
-		acct1.setAccountType(accountType); // "Saving"
-		acct1.setBalance(accountBalance); // "1500"
-		acct1.setEmailID(email); // "123@test.com"
-		acct1.setAccountStatus(accountStatus); // "Active"
+		acct1.setAccountNumber("400013412341236");
+		acct1.setAccountType("Saving");
+		acct1.setBalance("1500");
+		acct1.setEmailID("123@test.com");
+		acct1.setAccountStatus("Active");
 		CreateAccountRequest creatAcctReq1 = new CreateAccountRequest(acct1);
 		stringPayload = mapper.writeValueAsString(creatAcctReq1);
 		System.out.println(stringPayload);
@@ -144,21 +199,20 @@ public class ApiGatewayToDynamoDBDemo {
 
 	}
 
-	private static void testAccountHolder(String accountNum, String accountType, String email, String dob, String SSN,
-			String accountStatus, String name, String userName, String userRole) throws JsonProcessingException {
+	private static void testAccountHolder() throws JsonProcessingException {
 		OrionDBConnection connection = new OrionDBConnection();
 		PostDynamodbRequest request = new PostDynamodbRequest();
 		StringRequest strReq = new StringRequest();
 
 		// Create first account
 		AccountHolder acctHolder1 = new AccountHolder();
-		acctHolder1.setEmailID(email); // "123@test.com"
-		acctHolder1.setDob(dob); // "01/01/2000"
-		acctHolder1.setHolderStatus(accountStatus); // "Active"
-		acctHolder1.setLast4SSN(SSN); // "1234"
-		acctHolder1.setLegalName(name); // "Tester"
-		acctHolder1.setUserName(userName); // "tester01"
-		acctHolder1.setUserRole(userRole); // "Admin"
+		acctHolder1.setEmailID("123@test.com");
+		acctHolder1.setDob("01/01/2000");
+		acctHolder1.setHolderStatus("Active");
+		acctHolder1.setLast4SSN("1234");
+		acctHolder1.setLegalName("Tester");
+		acctHolder1.setUserName("tester01");
+		acctHolder1.setUserRole("Admin");
 		CreateAccountHolderRequest creatAcctReq1 = new CreateAccountHolderRequest(acctHolder1);
 		String stringPayload = mapper.writeValueAsString(creatAcctReq1);
 		System.out.println(stringPayload);
@@ -174,13 +228,13 @@ public class ApiGatewayToDynamoDBDemo {
 
 		// Create second account
 		AccountHolder acctHolder2 = new AccountHolder();
-		acctHolder2.setEmailID(email); //"321@test.com"
-		acctHolder2.setDob(dob); //"11/11/2000"
-		acctHolder2.setHolderStatus(accountStatus); //"Active"
-		acctHolder2.setLast4SSN(SSN); //"4321"
-		acctHolder2.setLegalName(name); //"Developer"
-		acctHolder2.setUserName(userName); //"developer1"
-		acctHolder2.setUserRole(userRole); //"Admin"
+		acctHolder2.setEmailID("321@test.com");
+		acctHolder2.setDob("11/11/2000");
+		acctHolder2.setHolderStatus("Active");
+		acctHolder2.setLast4SSN("4321");
+		acctHolder2.setLegalName("Developer");
+		acctHolder2.setUserName("developer1");
+		acctHolder2.setUserRole("Admin");
 		CreateAccountHolderRequest creatAcctReq2 = new CreateAccountHolderRequest(acctHolder2);
 		stringPayload = mapper.writeValueAsString(creatAcctReq2);
 		System.out.println(stringPayload);
