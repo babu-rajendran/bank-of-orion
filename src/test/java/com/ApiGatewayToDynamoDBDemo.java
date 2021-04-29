@@ -48,6 +48,12 @@ public class ApiGatewayToDynamoDBDemo {
 		PostDynamodbRequest request = new PostDynamodbRequest();
 		StringRequest strReq = new StringRequest();
 
+		//Check for duplicate account
+		List<Account> listExist = ListResponseTransform.transformListResponse(request,
+				new TypeReference<ArrayList<Account>>() {
+				});
+		listExist.forEach(System.out::println);
+		
 		// Create checking account
 		Account acct = new Account();
 		acct.setAccountNumber(accountNum); // "400013412341235"
@@ -75,6 +81,8 @@ public class ApiGatewayToDynamoDBDemo {
 		PostDynamodbRequest request = new PostDynamodbRequest();
 		StringRequest strReq = new StringRequest();
 
+		//Check for duplicate account
+		
 		// Create first account
 		AccountHolder acctHolder1 = new AccountHolder();
 		acctHolder1.setEmailID(email); // "123@test.com"
