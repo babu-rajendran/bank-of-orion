@@ -35,29 +35,40 @@ public class CreateAccount {
 	private static Mapper mapper = Mapper.getMapper();
 
 	public static void main(String[] args) throws JsonProcessingException {
-		createAccountHolder("1234", "Checking", "test1@sjsu.edu", "011201", "6075", "Active", "john", "john1", "admin");
+		createAccountHolder("1234", "Checking", "test1@sjsu.edu", "011201", "6075", "Active", "john", "1500", "john1",
+				"admin");
 	}
-	
+
 	private static void createAccountHolder(String accountNum, String accountType, String email, String dob, String SSN,
-			String accountStatus, String name, String userName, String userRole) throws JsonProcessingException {
-		OrionDBConnection connection = new OrionDBConnection();
-		PostDynamodbRequest request = new PostDynamodbRequest();
-		StringRequest strReq = new StringRequest();
+			String accountStatus, String name, String balance, String userName, String userRole)
+			throws JsonProcessingException {
 
 		// Check if AccountHolder exists
-		List<AccountHolder> listResponse = listAccountHolder("1321@test.com", "developer1", "emailID =:a and userName =:b");
-		
+		List<AccountHolder> listResponse = listAccountHolder("1321@test.com", "developer1",
+				"emailID =:a and userName =:b");
+
 		// Check if Account Exists
 		if (listResponse.isEmpty()) {
 			System.out.println("Account does not exist");
-			AccountHolder readResponse = readAccountHolder("4321@test.com");
-			if(readResponse == null){
+			AccountHolder readResponse = readAccountHolder(email);
+			if (readResponse == null) {
 				System.out.println("Email does not exist");
-			}else {
-				createAccount(accountNum, accountStatus, accountType, "1500" , email);
+			} else {
+				createAccount(accountNum, accountStatus, accountType, balance, email);
 			}
 		} else {
 			System.out.println("Account Exists");
+			AccountHolder readResponse = readAccountHolder(email);
+			if (readResponse == null) {
+				//Check all verifying fields
+			} else {
+				AccountHolder checkUsername = readAccountHolder(userName);
+				if(checkUsername == null) {
+					createAccount(accountNum, accountStatus, accountType, balance, email);
+				}else{
+					System.out.println("Another Account is already using this username");
+				}
+			}
 		}
 	}
 
@@ -77,19 +88,20 @@ public class CreateAccount {
 		CreateAccountRequest creatAcctReq = new CreateAccountRequest(acct);
 		String stringPayload = mapper.writeValueAsString(creatAcctReq);
 		System.out.println(stringPayload);
-		
+
 		strReq.setPayload(stringPayload);
 		request.setStringRequest(strReq);
 		System.out.println(request);
 		PostDynamodbResult result = connection.post(request); // Send to DB
 		System.out.println(CreateResponseTransform.transformCreateResponse(result));
 	}
-	
-	private static List<AccountHolder> listAccountHolder(String attribute1, String attribute2, String testExpression) throws JsonProcessingException{
+
+	private static List<AccountHolder> listAccountHolder(String attribute1, String attribute2, String testExpression)
+			throws JsonProcessingException {
 		OrionDBConnection connection = new OrionDBConnection();
 		PostDynamodbRequest request = new PostDynamodbRequest();
 		StringRequest strReq = new StringRequest();
-		
+
 		String filterExpression = testExpression;
 		AttributeJ listAttrs = new AttributeJ();
 		listAttrs.setA(attribute1);
@@ -109,12 +121,12 @@ public class CreateAccount {
 		listResponse.forEach(System.out::println);
 		return listResponse;
 	}
-	
-	private static AccountHolder readAccountHolder(String data) throws JsonProcessingException{
+
+	private static AccountHolder readAccountHolder(String data) throws JsonProcessingException {
 		OrionDBConnection connection = new OrionDBConnection();
 		PostDynamodbRequest request = new PostDynamodbRequest();
 		StringRequest strReq = new StringRequest();
-		
+
 		ReadAccountHolderRequest rdAcctReq = new ReadAccountHolderRequest(data);
 		String stringPayload = mapper.writeValueAsString(rdAcctReq);
 		System.out.println(stringPayload);
