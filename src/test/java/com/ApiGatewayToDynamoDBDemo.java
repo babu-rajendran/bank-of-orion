@@ -35,44 +35,35 @@ public class ApiGatewayToDynamoDBDemo {
 	private static Mapper mapper = Mapper.getMapper();
 
 	public static void main(String[] args) throws JsonProcessingException {
-		createAccount("123456", "Checking", "hello@sjsu.edu", "Active", "1500");
+		// createAccount("123456", "Checking", "hello@sjsu.edu", "Active", "1500");
 		System.out.println();
 		// createAccountHolder();
 		System.out.println();
-		testTransaction();
+		// testTransaction();
+
+		createAccountHolder("1234", "Checking", "test1@sjsu.edu", "011201", "6075", "Active", "john", "john1", "admin");
 	}
 
-	private static void createAccount(String accountNum, String accountType, String email, String accountStatus,
-			String accountBalance) throws JsonProcessingException {
+	private static void listAccount() throws JsonProcessingException {
 		OrionDBConnection connection = new OrionDBConnection();
 		PostDynamodbRequest request = new PostDynamodbRequest();
 		StringRequest strReq = new StringRequest();
 
-		//Check for duplicate account
-		List<Account> listExist = ListResponseTransform.transformListResponse(request,
-				new TypeReference<ArrayList<Account>>() {
-				});
-		listExist.forEach(System.out::println);
-		
-		// Create checking account
-		Account acct = new Account();
-		acct.setAccountNumber(accountNum); // "400013412341235"
-		acct.setAccountType(accountType); // "Checking"
-		acct.setBalance(accountBalance); // "1500"
-		acct.setEmailID(email); // "123@test.com"
-		acct.setAccountStatus(accountStatus); // "Active"
-		CreateAccountRequest creatAcctReq = new CreateAccountRequest(acct);
-		String stringPayload = mapper.writeValueAsString(creatAcctReq);
+		ReadAccountHolderRequest rdAcctReq = new ReadAccountHolderRequest("123@test.com");
+		String stringPayload = mapper.writeValueAsString(rdAcctReq);
 		System.out.println(stringPayload);
 
 		strReq.setPayload(stringPayload);
 		request.setStringRequest(strReq);
 		System.out.println(request);
 		PostDynamodbResult result = connection.post(request);
-		System.out.println(CreateResponseTransform.transformCreateResponse(result));
+		AccountHolder readResponse = ReadAndUpdateResponseTransform.transformRUResponse(result, AccountHolder.class);
+		System.out.println(readResponse);
+	}
 
-		System.out.println();
-		System.out.println();
+	private static void createAccount(String accountNum, String accountStatus, String accountType, String balance,
+			String email) throws JsonProcessingException {
+
 	}
 
 	private static void createAccountHolder(String accountNum, String accountType, String email, String dob, String SSN,
@@ -81,29 +72,31 @@ public class ApiGatewayToDynamoDBDemo {
 		PostDynamodbRequest request = new PostDynamodbRequest();
 		StringRequest strReq = new StringRequest();
 
-		//Check for duplicate account
-		
-		// Create first account
-		AccountHolder acctHolder1 = new AccountHolder();
-		acctHolder1.setEmailID(email); // "123@test.com"
-		acctHolder1.setDob(dob); // "01/01/2000"
-		acctHolder1.setHolderStatus(accountStatus); // "Active"
-		acctHolder1.setLast4SSN(SSN); // "1234"
-		acctHolder1.setLegalName(name); // "Tester"
-		acctHolder1.setUserName(userName); // "tester01"
-		acctHolder1.setUserRole(userRole); // "Admin"
-		CreateAccountHolderRequest creatAcctReq1 = new CreateAccountHolderRequest(acctHolder1);
-		String stringPayload = mapper.writeValueAsString(creatAcctReq1);
+		// Check if AccountHolder exists
+		String filterExpression = "emailID =:a or userName =:b";
+		AttributeJ listAttrs = new AttributeJ();
+		listAttrs.setA("1321@test.com");
+		listAttrs.setB("developer1");
+		ListAccountHolderRequest lstAcctHolderReq = new ListAccountHolderRequest(filterExpression, listAttrs);
+		String stringPayload = mapper.writeValueAsString(lstAcctHolderReq);
 		System.out.println(stringPayload);
 
 		strReq.setPayload(stringPayload);
 		request.setStringRequest(strReq);
 		System.out.println(request);
 		PostDynamodbResult result = connection.post(request);
-		System.out.println(CreateResponseTransform.transformCreateResponse(result));
 
-		System.out.println();
-		System.out.println();
+		List<AccountHolder> listResponse = ListResponseTransform.transformListResponse(result,
+				new TypeReference<ArrayList<AccountHolder>>() {
+				});
+		listResponse.forEach(System.out::println);
+
+		// Check if Account Exists
+		if (listResponse.isEmpty()) {
+			System.out.println("nothing inside");
+		} else {
+			System.out.println("something inside");
+		}
 	}
 
 	private static void testAccount() throws JsonProcessingException {
@@ -113,10 +106,10 @@ public class ApiGatewayToDynamoDBDemo {
 
 		// Create checking account
 		Account acct = new Account();
-		acct.setAccountNumber("400013412341235");
+		acct.setAccountNumber("1812391401");
 		acct.setAccountType("Checking");
 		acct.setBalance("1500");
-		acct.setEmailID("123@test.com");
+		acct.setEmailID("1234@test.com");
 		acct.setAccountStatus("Active");
 		CreateAccountRequest creatAcctReq = new CreateAccountRequest(acct);
 		String stringPayload = mapper.writeValueAsString(creatAcctReq);
@@ -125,7 +118,7 @@ public class ApiGatewayToDynamoDBDemo {
 		strReq.setPayload(stringPayload);
 		request.setStringRequest(strReq);
 		System.out.println(request);
-		PostDynamodbResult result = connection.post(request);
+		PostDynamodbResult result = connection.post(request); // Send to DB
 		System.out.println(CreateResponseTransform.transformCreateResponse(result));
 
 		System.out.println();
