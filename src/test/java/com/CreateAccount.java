@@ -35,7 +35,7 @@ public class CreateAccount {
 	private static Mapper mapper = Mapper.getMapper();
 
 	public static void main(String[] args) throws JsonProcessingException {
-		createAccountHolder("1234", "Checking", "test1@sjsu.edu", "011201", "6075", "Active", "john", "1500", "john1",
+		createAccountHolder("1234", "Checking", "hunle@test.com", "011201", "6075", "Active", "john", "1500", "john1",
 				"admin");
 	}
 
@@ -44,15 +44,14 @@ public class CreateAccount {
 			throws JsonProcessingException {
 
 		// Check if AccountHolder exists
-		List<AccountHolder> listResponse = listAccountHolder("1321@test.com", "developer1",
-				"emailID =:a and userName =:b");
+		List<AccountHolder> listResponse = listAccountHolder(email, userName);
 
 		// Check if Account Exists
 		if (listResponse.isEmpty()) {
-			System.out.println("Account does not exist");
+			System.out.println("FAILED: Account does not exist");
 			AccountHolder readResponse = readAccountHolder(email);
 			if (readResponse == null) {
-				System.out.println("Email does not exist");
+				System.out.println("FAILED: Email does not exist");
 			} else {
 				createAccount(accountNum, accountStatus, accountType, balance, email);
 			}
@@ -61,12 +60,19 @@ public class CreateAccount {
 			AccountHolder readResponse = readAccountHolder(email);
 			if (readResponse == null) {
 				//Check all verifying fields
+				List<AccountHolder> vertifyUser = vertifyAccountHolder(SSN, dob, name);
+				if (vertifyUser.isEmpty()) {
+					//No matching user
+					System.out.println("FAILED: No matching user is found");
+				}else{
+					//User exists; update userName and Name
+				}
 			} else {
 				AccountHolder checkUsername = readAccountHolder(userName);
 				if(checkUsername == null) {
 					createAccount(accountNum, accountStatus, accountType, balance, email);
 				}else{
-					System.out.println("Another Account is already using this username");
+					System.out.println("FAILED: Another Account is already using this username");
 				}
 			}
 		}
@@ -96,16 +102,43 @@ public class CreateAccount {
 		System.out.println(CreateResponseTransform.transformCreateResponse(result));
 	}
 
-	private static List<AccountHolder> listAccountHolder(String attribute1, String attribute2, String testExpression)
+	private static List<AccountHolder> listAccountHolder(String attribute1, String attribute2)
 			throws JsonProcessingException {
 		OrionDBConnection connection = new OrionDBConnection();
 		PostDynamodbRequest request = new PostDynamodbRequest();
 		StringRequest strReq = new StringRequest();
 
-		String filterExpression = testExpression;
+		String filterExpression = "emailID =:a and userName =:b";
 		AttributeJ listAttrs = new AttributeJ();
 		listAttrs.setA(attribute1);
 		listAttrs.setB(attribute2);
+		ListAccountHolderRequest lstAcctHolderReq = new ListAccountHolderRequest(filterExpression, listAttrs);
+		String stringPayload = mapper.writeValueAsString(lstAcctHolderReq);
+		System.out.println(stringPayload);
+
+		strReq.setPayload(stringPayload);
+		request.setStringRequest(strReq);
+		System.out.println(request);
+		PostDynamodbResult result = connection.post(request);
+
+		List<AccountHolder> listResponse = ListResponseTransform.transformListResponse(result,
+				new TypeReference<ArrayList<AccountHolder>>() {
+				});
+		listResponse.forEach(System.out::println);
+		return listResponse;
+	}
+	
+	private static List<AccountHolder> vertifyAccountHolder(String attribute1, String attribute2, String attribute3)
+			throws JsonProcessingException {
+		OrionDBConnection connection = new OrionDBConnection();
+		PostDynamodbRequest request = new PostDynamodbRequest();
+		StringRequest strReq = new StringRequest();
+
+		String filterExpression = "SSN =:a and dob =:b and name =:c";
+		AttributeJ listAttrs = new AttributeJ();
+		listAttrs.setA(attribute1);
+		listAttrs.setB(attribute2);
+		listAttrs.setC(attribute3);
 		ListAccountHolderRequest lstAcctHolderReq = new ListAccountHolderRequest(filterExpression, listAttrs);
 		String stringPayload = mapper.writeValueAsString(lstAcctHolderReq);
 		System.out.println(stringPayload);
