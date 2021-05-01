@@ -59,19 +59,20 @@ public class CreateAccount {
 			System.out.println("Account Exists");
 			AccountHolder readResponse = readAccountHolder(email);
 			if (readResponse == null) {
-				//Check all verifying fields
+				// Check all verifying fields
 				List<AccountHolder> vertifyUser = vertifyAccountHolder(SSN, dob, name);
 				if (vertifyUser.isEmpty()) {
-					//No matching user
+					// No matching user
 					System.out.println("FAILED: No matching user is found");
-				}else{
-					//User exists; update userName and Name
+				} else {
+					// User exists; update userName and Name
+					updateAccountHolder(name, userName, email);
 				}
 			} else {
 				AccountHolder checkUsername = readAccountHolder(userName);
-				if(checkUsername == null) {
+				if (checkUsername == null) {
 					createAccount(accountNum, accountStatus, accountType, balance, email);
-				}else{
+				} else {
 					System.out.println("FAILED: Another Account is already using this username");
 				}
 			}
@@ -127,7 +128,7 @@ public class CreateAccount {
 		listResponse.forEach(System.out::println);
 		return listResponse;
 	}
-	
+
 	private static List<AccountHolder> vertifyAccountHolder(String attribute1, String attribute2, String attribute3)
 			throws JsonProcessingException {
 		OrionDBConnection connection = new OrionDBConnection();
@@ -153,6 +154,28 @@ public class CreateAccount {
 				});
 		listResponse.forEach(System.out::println);
 		return listResponse;
+	}
+
+	private static void updateAccountHolder(String attribute1, String attribute2, String email) throws JsonProcessingException {
+		OrionDBConnection connection = new OrionDBConnection();
+		PostDynamodbRequest request = new PostDynamodbRequest();
+		StringRequest strReq = new StringRequest();
+
+		String updateExpression = "set name =:a, userName =:b";
+		AttributeJ updateAttrs = new AttributeJ();
+		updateAttrs.setA(attribute1);
+		updateAttrs.setB(attribute2);
+		UpdateAccountHolderRequest updtAcctReq = new UpdateAccountHolderRequest(email, updateExpression,
+				updateAttrs);
+		String stringPayload = mapper.writeValueAsString(updtAcctReq);
+		System.out.println(stringPayload);
+
+		strReq.setPayload(stringPayload);
+		request.setStringRequest(strReq);
+		System.out.println(request);
+		PostDynamodbResult result = connection.post(request);
+		AccountHolder updateResponse = ReadAndUpdateResponseTransform.transformRUResponse(result, AccountHolder.class);
+		System.out.println(updateResponse);
 	}
 
 	private static AccountHolder readAccountHolder(String data) throws JsonProcessingException {
