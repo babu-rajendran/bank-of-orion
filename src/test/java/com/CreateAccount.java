@@ -35,11 +35,13 @@ public class CreateAccount {
 	private static Mapper mapper = Mapper.getMapper();
 
 	public static void main(String[] args) throws JsonProcessingException {
-		//createCustomer("917498187304", "Saving", "1234@sjsu.edu", "091211", "8726", "David", "2000");
-		//System.out.println(activateCustomer("1234@sjsu.edu", "091211", "8726", "David", "adsfa", "John2"));
+		// createCustomer("917498187304", "Saving", "1234@sjsu.edu", "091211", "8726",
+		// "David", "2000");
+		System.out.println(activateCustomer("1234@sjsu.edu", "091211", "8726", "David", "adsfa", "John2"));
 	}
 
-	public static void createCustomer(String accountNum, String accountType, String email, String dob, String SSN, String name, String balance) throws JsonProcessingException {
+	public static void createCustomer(String accountNum, String accountType, String email, String dob, String SSN,
+			String name, String balance) throws JsonProcessingException {
 		AccountHolder readResponse = readAccountHolder(email);
 		if (readResponse == null) {
 			System.out.println("Create new accountholder and account");
@@ -57,7 +59,7 @@ public class CreateAccount {
 			return "FAILED: No accountholder found";
 		} else {
 			String accountHolderStatus = readResponse.getHolderStatus();
-			if(accountHolderStatus.equals("Inactive")) {
+			if (accountHolderStatus.equals("Inactive")) {
 				List<AccountHolder> checkUsername = verifyUserName(userName);
 				if (!checkUsername.isEmpty()) {
 					return "FAILED: Username is not available";
@@ -73,7 +75,7 @@ public class CreateAccount {
 				} else {
 					return "FAILED: Verification does not match";
 				}
-			}else {
+			} else {
 				return "FAILED: The account exists and is active or suspended";
 			}
 		}
