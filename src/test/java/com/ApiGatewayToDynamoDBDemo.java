@@ -19,7 +19,6 @@ import com.bank.orion.payload.transaction.CreateTransactionRequest;
 import com.bank.orion.payload.transaction.ListTransactionRequest;
 import com.bank.orion.payload.transaction.ReadTransactionRequest;
 import com.bank.orion.payload.transaction.UpdateTransactionRequest;
-import com.bank.orion.service.ClosingAccountService;
 import com.bank.orion.util.Mapper;
 import com.bank.orion.util.OrionDBConnection;
 import com.bank.orion.util.responseTransform.CreateResponseTransform;
@@ -43,8 +42,6 @@ public class ApiGatewayToDynamoDBDemo {
 		System.out.println();
 		//testTransaction();
 		//createAccount();
-		ClosingAccountService service = new ClosingAccountService();
-		service.closeAccountHolder("hunle@test.com");
 	}
 	
 	private static void createAccount() throws JsonMappingException, JsonProcessingException {

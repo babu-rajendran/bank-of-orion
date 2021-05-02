@@ -1,6 +1,13 @@
 package com.bank.orion.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.RandomStringUtils;
 
 import com.bank.orion.model.Transaction;
 import com.bank.orion.payload.attributes.AttributeJ;
@@ -9,7 +16,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class TransactionService {
 
-	protected TransactionRepository transactionRepo = new TransactionRepository();
+	private TransactionRepository transactionRepo = new TransactionRepository();
+	public static final String BANK_ROUNTING_NUMBER = "12345";
+	private AccountService accountService = new AccountService();
+
+	public Transaction getTransactionWithTransactionID(String transactionID) throws JsonProcessingException {
+		return transactionRepo.readTransaction(transactionID);
+	}
 
 	public List<Transaction> getTransactionsWithAcctNum(String accountNumber) throws JsonProcessingException {
 
@@ -67,6 +80,98 @@ public class TransactionService {
 		}
 
 		return readResponse;
+	}
+
+	public String cancelTransaction(String transactionID) {
+
+		boolean isPending;
+		Transaction readResponse;
+		try {
+			readResponse = getTransactionWithTransactionID(transactionID);
+			isPending = readResponse.getTransactionStatus().equals("Pending");
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return "Error while getting transaction";
+		}
+
+		if (isPending) {
+			return updateTransactionStatus(transactionID, "Cancelled");
+		}
+		return "Transaction cannot be cancelled";
+	}
+
+	public String approveTransaction(String transactionID, String userRole) {
+		if (userRole.equals("Admin")) {
+
+			boolean isPending;
+			Transaction readResponse;
+			try {
+				readResponse = getTransactionWithTransactionID(transactionID);
+				isPending = readResponse.getTransactionStatus().equals("Pending");
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+				return "Error while getting transaction";
+			}
+
+			if (isPending) {
+				String amount = readResponse.getAmount();
+				String deduct = accountService.deductBalance(readResponse.getSendingAccountNumber(), amount);
+
+				if (readResponse.getReceivingRounting().equals(BANK_ROUNTING_NUMBER)
+						&& !deduct.equals(AccountService.CURRENT_BALANCE_IS_NOT_ENOUGH)) {
+					accountService.addBalance(readResponse.getReceivingAccountNumber(), amount);
+				} else {
+					return AccountService.CURRENT_BALANCE_IS_NOT_ENOUGH;
+				}
+
+				return updateTransactionStatus(transactionID, "Completed");
+			} else {
+				return "Transaction is already cancellled or completed";
+			}
+
+		}
+		return "Need to be admin";
+	}
+
+	public String schedulePayment(String amount, String transactionDate, String description,
+			String receivingAccountNumber, String sendingAccountNumber, String receivingRounting, boolean isRecur,
+			int repeatTime, long period) {
+		String datePattern = "((0[1-9]|1[0-2])\\/(0[1-9]|[12]\\d|3[01])\\/[12]\\d{3})";
+		Pattern pattern = Pattern.compile(datePattern);
+
+		Matcher matcher = pattern.matcher(transactionDate);
+		boolean matches = matcher.matches();
+
+		if (!matches) {
+			return "Invalid date format! Please enter with format as mm/dd/yyyy";
+		}
+
+		String transactionID = generateTransactionID();
+		createTransaction(amount, transactionDate, description, receivingAccountNumber, sendingAccountNumber, "Pending",
+				transactionID, receivingRounting);
+
+		if (isRecur) {
+			for (int i = 0; i < repeatTime; i++) {
+				transactionDate = getNextTransactionDate(transactionDate, period);
+				transactionID = generateTransactionID();
+				createTransaction(amount, transactionDate, description, receivingAccountNumber, sendingAccountNumber,
+						"Pending", transactionID, receivingRounting);
+			}
+		}
+
+		return "OK";
+	}
+
+	private String getNextTransactionDate(String transactionDate, long period) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		formatter = formatter.withLocale(Locale.US);
+		LocalDate date = LocalDate.parse(transactionDate, formatter);
+		date = date.plusDays(period);
+		return date.format(formatter);
+	}
+
+	private String generateTransactionID() {
+		return RandomStringUtils.randomAlphanumeric(16);
 	}
 
 }
