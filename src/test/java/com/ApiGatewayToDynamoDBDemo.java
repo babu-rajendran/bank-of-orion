@@ -35,11 +35,11 @@ public class ApiGatewayToDynamoDBDemo {
 	private static Mapper mapper = Mapper.getMapper();
 
 	public static void main(String[] args) throws JsonProcessingException {
-		//testAccount();
+		testAccountHolder();
 		System.out.println();
 		//testAccountHolder();
 		System.out.println();
-		testTransaction();
+		//testTransaction();
 	}
 
 	private static void testAccount() throws JsonProcessingException {
