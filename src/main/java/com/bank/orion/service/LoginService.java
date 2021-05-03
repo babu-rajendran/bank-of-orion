@@ -13,7 +13,7 @@ public class LoginService {
 
 	private AccountHolderRepository acctHolderRepo = new AccountHolderRepository();
 
-	public boolean checkLogin(String userName, String accountPass) {
+	public AccountHolder checkLogin(String userName, String accountPass) {
 
 		String filterExpression = "userName =:a";
 		AttributeJ listAttrs = new AttributeJ();
@@ -24,14 +24,15 @@ public class LoginService {
 			listResponse = acctHolderRepo.listAccountHolder(filterExpression, listAttrs);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 
-		if (CollectionUtils.isEmpty(listResponse) || !listResponse.get(0).getAccountPass().equals(accountPass)) {
-			return false;
+		AccountHolder user = listResponse.get(0);
+		if (CollectionUtils.isEmpty(listResponse) || !user.getAccountPass().equals(accountPass)) {
+			return null;
 		}
 
-		return true;
+		return user;
 	}
 
 }

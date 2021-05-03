@@ -57,7 +57,7 @@ public class AccountService {
 				return "Error while updating account balance";
 			}
 
-			return "Success in updating account balance";
+			return "OK";
 		}
 
 		return ACCOUNT_NUMBER_DOES_NOT_EXIST;
@@ -98,7 +98,7 @@ public class AccountService {
 				return "Error while updating account balance";
 			}
 
-			return "Success in updating account balance";
+			return "OK";
 		}
 
 		return ACCOUNT_NUMBER_DOES_NOT_EXIST;

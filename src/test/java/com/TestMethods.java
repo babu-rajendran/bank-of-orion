@@ -28,5 +28,9 @@ public class TestMethods {
 		
 		String str = RandomStringUtils.randomAlphanumeric(16);
 		System.out.println(str);
+		
+		date = LocalDate.now();
+		System.out.println(date.format(formatter));
+		
 	}
 }

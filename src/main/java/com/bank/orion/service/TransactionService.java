@@ -170,7 +170,7 @@ public class TransactionService {
 		return date.format(formatter);
 	}
 
-	private String generateTransactionID() {
+	public String generateTransactionID() {
 		return RandomStringUtils.randomAlphanumeric(16);
 	}
 

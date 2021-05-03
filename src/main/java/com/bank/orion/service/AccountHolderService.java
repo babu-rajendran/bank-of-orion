@@ -185,7 +185,7 @@ public class AccountHolderService {
 		acctHolderRepo.createAccountHolder(acctHolder);
 	}
 
-	public List<AccountHolder> verifyUserName(String userName) throws JsonProcessingException {
+	private List<AccountHolder> verifyUserName(String userName) throws JsonProcessingException {
 		String filterExpression = "userName =:a";
 		AttributeJ listAttrs = new AttributeJ();
 		listAttrs.setA(userName);
@@ -193,7 +193,7 @@ public class AccountHolderService {
 		return acctHolderRepo.listAccountHolder(filterExpression, listAttrs);
 	}
 
-	public void activateAcctHolder(String accountPass, String userName, String email) throws JsonProcessingException {
+	private void activateAcctHolder(String accountPass, String userName, String email) throws JsonProcessingException {
 		String updateExpression = "set accountPass =:a, userName =:b, holderStatus =:c";
 		AttributeJ updateAttrs = new AttributeJ();
 		updateAttrs.setA(accountPass);
