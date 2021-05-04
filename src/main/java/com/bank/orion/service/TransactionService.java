@@ -17,7 +17,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 public class TransactionService {
 
 	private TransactionRepository transactionRepo = new TransactionRepository();
-	public static final String BANK_ROUNTING_NUMBER = "12345";
+	public static final String BANK_ROUTING_NUMBER = "12345";
 	private AccountService accountService = new AccountService();
 
 	public Transaction getTransactionWithTransactionID(String transactionID) throws JsonProcessingException {
@@ -117,7 +117,7 @@ public class TransactionService {
 				String amount = readResponse.getAmount();
 				String deduct = accountService.deductBalance(readResponse.getSendingAccountNumber(), amount);
 
-				if (readResponse.getReceivingRounting().equals(BANK_ROUNTING_NUMBER)
+				if (readResponse.getReceivingRounting().equals(BANK_ROUTING_NUMBER)
 						&& !deduct.equals(AccountService.CURRENT_BALANCE_IS_NOT_ENOUGH)) {
 					accountService.addBalance(readResponse.getReceivingAccountNumber(), amount);
 				} else {

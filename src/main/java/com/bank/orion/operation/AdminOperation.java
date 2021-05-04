@@ -65,7 +65,7 @@ public class AdminOperation extends UserOperation {
 			String transactionDate = getCurrentDate();
 			String transactionID = transactionService.generateTransactionID();
 			return transactionService.createTransaction(amount, transactionDate, "Deposit", acctNum, "", "Completed",
-					transactionID, TransactionService.BANK_ROUNTING_NUMBER);
+					transactionID, TransactionService.BANK_ROUTING_NUMBER);
 		}
 		return addBalance;
 	}
@@ -76,7 +76,7 @@ public class AdminOperation extends UserOperation {
 			String transactionDate = getCurrentDate();
 			String transactionID = transactionService.generateTransactionID();
 			return transactionService.createTransaction(amount, transactionDate, "Withdrawn", "", acctNum, "Completed",
-					transactionID, TransactionService.BANK_ROUNTING_NUMBER);
+					transactionID, TransactionService.BANK_ROUTING_NUMBER);
 		}
 		return deductBalance;
 	}

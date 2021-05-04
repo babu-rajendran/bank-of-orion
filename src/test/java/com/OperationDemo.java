@@ -28,7 +28,7 @@ public class OperationDemo {
 		String description = "Test";
 		String receivingAccountNumber = accountNum;
 		String sendingAccountNumber = accountNum2;
-		String receivingRounting = TransactionService.BANK_ROUNTING_NUMBER;
+		String receivingRounting = TransactionService.BANK_ROUTING_NUMBER;
 		boolean isRecur = true;
 		int repeatTime = 2;
 		long period = 5;
