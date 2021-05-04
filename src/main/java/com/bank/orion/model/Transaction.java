@@ -9,6 +9,7 @@ public class Transaction implements Item {
 	private String sendingAccountNumber;
 	private String transactionStatus;
 	private String transactionID;
+	private String receivingRounting;
 
 	public String getAmount() {
 		return amount;
@@ -66,12 +67,20 @@ public class Transaction implements Item {
 		this.transactionID = transactionID;
 	}
 
+	public String getReceivingRounting() {
+		return receivingRounting;
+	}
+
+	public void setReceivingRounting(String receivingRounting) {
+		this.receivingRounting = receivingRounting;
+	}
+
 	@Override
 	public String toString() {
 		return "Transaction [amount=" + amount + ", transactionDate=" + transactionDate + ", description=" + description
 				+ ", receivingAccountNumber=" + receivingAccountNumber + ", sendingAccountNumber="
 				+ sendingAccountNumber + ", transactionStatus=" + transactionStatus + ", transactionID=" + transactionID
-				+ "]";
+				+ ", receivingRounting=" + receivingRounting + "]";
 	}
 
 }

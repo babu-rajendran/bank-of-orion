@@ -26,6 +26,7 @@ import com.bank.orion.util.responseTransform.ListResponseTransform;
 import com.bank.orion.util.responseTransform.ReadAndUpdateResponseTransform;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import aws.apigateway.db.model.PostDynamodbRequest;
 import aws.apigateway.db.model.PostDynamodbResult;
@@ -35,11 +36,69 @@ public class ApiGatewayToDynamoDBDemo {
 	private static Mapper mapper = Mapper.getMapper();
 
 	public static void main(String[] args) throws JsonProcessingException {
-		testAccountHolder();
+		//testAccount();
 		System.out.println();
 		//testAccountHolder();
 		System.out.println();
 		//testTransaction();
+		//createAccount();
+	}
+	
+	private static void createAccount() throws JsonMappingException, JsonProcessingException {
+		OrionDBConnection connection = new OrionDBConnection();
+		PostDynamodbRequest request = new PostDynamodbRequest();
+		StringRequest strReq = new StringRequest();
+		
+		AccountHolder acctHolder1 = new AccountHolder();
+		acctHolder1.setEmailID("hunle@test.com");
+		acctHolder1.setDob("01/01/2000");
+		acctHolder1.setHolderStatus("Active");
+		acctHolder1.setLast4SSN("1234");
+		acctHolder1.setLegalName("hunle");
+		acctHolder1.setUserName("testhunle");
+		acctHolder1.setUserRole("Admin");
+		CreateAccountHolderRequest creatAcctReq1 = new CreateAccountHolderRequest(acctHolder1);
+		String stringPayload = mapper.writeValueAsString(creatAcctReq1);
+		System.out.println(stringPayload);
+
+		strReq.setPayload(stringPayload);
+		request.setStringRequest(strReq);
+		System.out.println(request);
+		PostDynamodbResult result = connection.post(request);
+		System.out.println(CreateResponseTransform.transformCreateResponse(result));
+
+		// Create checking account
+		Account acct = new Account();
+		acct.setAccountNumber("400013412344321");
+		acct.setAccountType("Checking");
+		acct.setBalance("1500");
+		acct.setEmailID("hunle@test.com");
+		acct.setAccountStatus("Active");
+		CreateAccountRequest creatAcctReq = new CreateAccountRequest(acct);
+		stringPayload = mapper.writeValueAsString(creatAcctReq);
+		System.out.println(stringPayload);
+
+		strReq.setPayload(stringPayload);
+		request.setStringRequest(strReq);
+		System.out.println(request);
+		result = connection.post(request);
+		System.out.println(CreateResponseTransform.transformCreateResponse(result));
+		
+		acct = new Account();
+		acct.setAccountNumber("400013412344322");
+		acct.setAccountType("Saving");
+		acct.setBalance("1500");
+		acct.setEmailID("hunle@test.com");
+		acct.setAccountStatus("Active");
+		creatAcctReq = new CreateAccountRequest(acct);
+		stringPayload = mapper.writeValueAsString(creatAcctReq);
+		System.out.println(stringPayload);
+
+		strReq.setPayload(stringPayload);
+		request.setStringRequest(strReq);
+		System.out.println(request);
+		result = connection.post(request);
+		System.out.println(CreateResponseTransform.transformCreateResponse(result));
 	}
 
 	private static void testAccount() throws JsonProcessingException {
