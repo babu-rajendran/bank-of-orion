@@ -45,7 +45,7 @@ public class HelloWorldControllerTest {
     @Test
     @DisplayName("Basic test for controller")
     void testHelloWorld() {
-        ModelAndView actualModelAndView = helloWorldController.helloWorld();
+        ModelAndView actualModelAndView = helloWorldController.index();
 
         // Verify the result obtained matches the values we expect.
         assertEquals(EXPECTED_VIEW_NAME, actualModelAndView.getViewName());
