@@ -20,10 +20,80 @@ End of Example --%>
 </head>
 <body class="text-center">
 
-	<!-- Build your body html here -->
-
-	<!-- End your body html here -->
-
+	<div class="container-fluid" >
+            <div class="row justify-content-center container-fluid bg-light border rounded-3 py-5">
+                <div class="mt-5 mb-3 text-muted">
+                    <a href="${pageContext.request.contextPath}"> Home Page (Admin Page) </a>
+                </div>  
+                <h2>Transaction Summary</h2>
+                <ol class="list-group list-group-flushed">
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                      <div class="ms-2 me-auto">
+                        <div class="fw-bold">ID:</div>
+                        123456789
+                      </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                      <div class="ms-2 me-auto">
+                        <div class="fw-bold">Description</div>
+                        Transaction 100
+                      </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                      <div class="ms-2 me-auto">
+                        <div class="fw-bold">From</div>
+                        John Doe
+                      </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                          <div class="fw-bold">To</div>
+                          Jane Doe
+                        </div>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                          <div class="fw-bold">Date</div>
+                          mm/dd/yy
+                        </div>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                          <div class="fw-bold">Amount</div>
+                          1500
+                        </div>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                          <div class="fw-bold">Status</div>
+                          Pending
+                        </div>
+                      </li>
+                  </ol>
+                  <div class="row">
+                    <div class="col-md-12">
+                        <div class="btn-group"></div>
+                            <div class="form-group">
+                                <br>
+                                <button type="submit" class="btn btn-primary btn-sm" type="submit">Cancel Transaction</button>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <br>
+                                <button type="submit" class="btn btn-primary btn-sm" type="submit">Dispute Transaction</button>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <br>
+                                <button type="submit" class="btn btn-primary btn-sm" type="submit">Approve Transaction</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 	<!-- Import your custom js here -->
