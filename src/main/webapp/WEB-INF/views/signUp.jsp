@@ -39,79 +39,73 @@
 		</header>
 	</div>
 
-	<div class="container-fluid">
-		<div
-			class="row justify-content-center container-fluid bg-light border rounded-3 py-5">
-			<h2>Activate account</h2>
-			<form action="#">
-				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group">
-							<label class="label" for="name">Full Name</label> <input
-								type="text" class="form-control">
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-							<label class="label" for="name">Username</label> <input
-								type="text" class="form-control">
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<div class="form-group">
-							<label class="label" for="email">Email Address</label> <input
-								type="email" class="form-control">
-						</div>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-12">
-						<div class="form-group">
-							<label class="label" for="password">Password</label> <input
-								type="password" class="form-control">
-						</div>
-					</div>
-				</div>
-
-
-				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group">
-							<label class="label" for="name">Birthday</label> <input
-								type="text" class="form-control">
-						</div>
-
-					</div>
-
-					<div class="col-md-6">
-						<div class="form-group">
-							<label class="label" for="name">SSN</label> <input type="text"
-								class="form-control">
-						</div>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-12">
-						<div class="form-group">
-							<br>
-							<button type="submit" class="btn btn-primary submit">Activate
-							</button>
-						</div>
-					</div>
-				</div>
-
-			</form>
-			<div class="w-100">
-				<p class="mt-4">
-					I already have an account! <a href="#signin">Sign In</a>
-				</p>
-			</div>
-		</div>
-
+	<div class="container-fluid" >
+	    <div class="row justify-content-center container-fluid bg-light border rounded-3 py-5">
+	        <div class="mt-5 mb-3 text-muted">
+	            <a href="${pageContext.request.contextPath}"> Home Page (Admin Page) </a>
+	        </div>
+	        <h2>Create New Account</h2>
+	        <form action="#">
+	            <div class="row">
+	                <div class="col-md-6">
+	                    <div class="form-group">
+	                        <label class="label" for="name">*Name: </label> <input
+	                            type="text" class="form-control"  placeholder="John Doe">
+	                    </div>
+	                </div>
+	                <div class="col-md-6">
+	                    <div class="form-group">
+	                        <label class="label" for="name">*Date of Birth: </label> <input
+	                            type="text" class="form-control"  placeholder="mm/dd/yy">
+	                    </div>
+	                </div>
+	                <div class="col-md-6">
+	                    <div class="form-group">
+	                        <label class="label" for="name">*Account Number: </label> <input
+	                            type="text" class="form-control"  placeholder="123456789">
+	                    </div>
+	                </div>
+	                <div class="col-md-6">
+	                    <div class="form-group">
+	                        <label class="label" for="name">*Account Type: </label> <input
+	                            type="text" class="form-control"  placeholder="Checking">
+	                    </div>
+	                </div>
+	                <div class="col-md-6">
+	                    <div class="form-group">
+	                        <label class="label" for="name">*Amount: </label> <input
+	                            type="text" class="form-control"  placeholder="1500">
+	                    </div>
+	                </div>
+	                <div class="col-md-6">
+	                    <div class="form-group">
+	                        <label class="label" for="name">*Last 4 SSN: </label> <input
+	                            type="text" class="form-control"  placeholder="1234">
+	                    </div>
+	                </div>
+	                <div class="col-md-6">
+	                    <div class="form-group">
+	                        <label class="label" for="name">*Email: </label> <input
+	                            type="text" class="form-control"  placeholder="johndoe@sjsu.edu">
+	                    </div>
+	                </div>
+	                <div class="col-md-6">
+	                    <div class="form-group">
+	                        <label class="label" for="name">*Phone: </label> <input
+	                            type="text" class="form-control"  placeholder="(408)123-4567">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="row">
+	                <div class="col-md-12">
+	                    <div class="form-group">
+	                        <br>
+	                        <button type="submit" class="btn btn-primary submit">Submit</button>
+	                    </div>
+	                </div>
+	            </div>
+	        </form>
+	    </div>
 	</div>
 	<!-- End your body html here -->
 
