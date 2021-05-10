@@ -12,10 +12,6 @@
 
 End of Example --%>
 
-
-
-
-
 <!-- End your custom css here -->
 </head>
 <body class="text-center">
