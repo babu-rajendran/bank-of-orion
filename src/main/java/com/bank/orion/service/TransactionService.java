@@ -55,7 +55,7 @@ public class TransactionService {
 			return "Error while updating transaction status";
 		}
 
-		return "Success in updating transaction status";
+		return "OK";
 	}
 
 	public String createTransaction(String amount, String transactionDate, String description,
@@ -136,7 +136,7 @@ public class TransactionService {
 	public String schedulePayment(String amount, String transactionDate, String description,
 			String receivingAccountNumber, String sendingAccountNumber, String receivingRounting, boolean isRecur,
 			int repeatTime, long period) {
-		String datePattern = "((0[1-9]|1[0-2])\\/(0[1-9]|[12]\\d|3[01])\\/[12]\\d{3})";
+		String datePattern = "([12]\\d{3}\\/(0[1-9]|1[0-2])\\/(0[1-9]|[12]\\d|3[01]))";
 		Pattern pattern = Pattern.compile(datePattern);
 
 		Matcher matcher = pattern.matcher(transactionDate);
@@ -159,11 +159,11 @@ public class TransactionService {
 			}
 		}
 
-		return "OK";
+		return "SUCCESS: Scheduled payment!!!";
 	}
 
 	private String getNextTransactionDate(String transactionDate, long period) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 		formatter = formatter.withLocale(Locale.US);
 		LocalDate date = LocalDate.parse(transactionDate, formatter);
 		date = date.plusDays(period);

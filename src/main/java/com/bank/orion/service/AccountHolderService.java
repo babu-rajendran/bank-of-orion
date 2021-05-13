@@ -75,7 +75,7 @@ public class AccountHolderService {
 	}
 
 	public String createCustomer(String accountNum, String accountType, String email, String dob, String SSN,
-			String name, String balance) {
+			String name, String balance, String phone) {
 		AccountHolder readResponse;
 		try {
 			readResponse = acctHolderRepo.readAccountHolder(email);
@@ -87,7 +87,7 @@ public class AccountHolderService {
 			System.out.println("Create new accountholder and account");
 
 			try {
-				createAccountHolder(email, dob, SSN, name);
+				createAccountHolder(email, dob, SSN, name, phone);
 				if (acctService.getAccountWithAcctNum(accountNum) == null) {
 					acctService.createAccount(accountNum, accountType, balance, email);
 				} else {
@@ -98,7 +98,7 @@ public class AccountHolderService {
 				e.printStackTrace();
 				return "Error while creating customer";
 			}
-			return "OK";
+			return "SUCCESS: Created new user and account!!!";
 		} else {
 			try {
 				if (acctService.getAccountWithAcctNum(accountNum) == null) {
@@ -110,7 +110,7 @@ public class AccountHolderService {
 				e.printStackTrace();
 				return "Error while creating account";
 			}
-			return "OK";
+			return "SUCCESS: Created new account!!!";
 		}
 	}
 
@@ -163,7 +163,7 @@ public class AccountHolderService {
 							return "Error while activate acount";
 						}
 					}
-					return "Account has been updated";
+					return "Account has been activated";
 				} else {
 					return "FAILED: Verification does not match";
 				}
@@ -173,7 +173,8 @@ public class AccountHolderService {
 		}
 	}
 
-	private void createAccountHolder(String email, String dob, String SSN, String name) throws JsonProcessingException {
+	private void createAccountHolder(String email, String dob, String SSN, String name, String phone)
+			throws JsonProcessingException {
 
 		AccountHolder acctHolder = new AccountHolder();
 		acctHolder.setEmailID(email);
@@ -182,6 +183,7 @@ public class AccountHolderService {
 		acctHolder.setLast4SSN(SSN);
 		acctHolder.setLegalName(name);
 		acctHolder.setUserRole("User");
+		acctHolder.setPhone(phone);
 		acctHolderRepo.createAccountHolder(acctHolder);
 	}
 

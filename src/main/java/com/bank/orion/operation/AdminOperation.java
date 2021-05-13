@@ -61,7 +61,7 @@ public class AdminOperation extends UserOperation {
 
 	public String deposit(String acctNum, String amount) {
 		String addBalance = accountService.addBalance(acctNum, amount);
-		if (addBalance.endsWith("OK")) {
+		if (addBalance.equals("OK")) {
 			String transactionDate = getCurrentDate();
 			String transactionID = transactionService.generateTransactionID();
 			return transactionService.createTransaction(amount, transactionDate, "Deposit", acctNum, "", "Completed",
@@ -72,7 +72,7 @@ public class AdminOperation extends UserOperation {
 
 	public String deduct(String acctNum, String amount) {
 		String deductBalance = accountService.deductBalance(acctNum, amount);
-		if (deductBalance.endsWith("OK")) {
+		if (deductBalance.equals("OK")) {
 			String transactionDate = getCurrentDate();
 			String transactionID = transactionService.generateTransactionID();
 			return transactionService.createTransaction(amount, transactionDate, "Withdrawn", "", acctNum, "Completed",
@@ -86,11 +86,11 @@ public class AdminOperation extends UserOperation {
 	}
 
 	public String createUser(String accountNum, String accountType, String email, String dob, String SSN, String name,
-			String balance) {
-		return accountHolderService.createCustomer(accountNum, accountType, email, dob, SSN, name, balance);
+			String balance, String phone) {
+		return accountHolderService.createCustomer(accountNum, accountType, email, dob, SSN, name, balance, phone);
 	}
 
-	private AccountHolder getUserWithEmail(String emailID) {
+	public AccountHolder getUserWithEmail(String emailID) {
 		try {
 			return accountHolderService.getAccountHolderWithEmail(emailID);
 		} catch (JsonProcessingException e) {
@@ -121,7 +121,7 @@ public class AdminOperation extends UserOperation {
 	}
 
 	private String getCurrentDate() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 		formatter = formatter.withLocale(Locale.US);
 		LocalDate date = LocalDate.now();
 		return date.format(formatter);
