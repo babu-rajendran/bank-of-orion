@@ -116,12 +116,13 @@ public class TransactionService {
 			if (isPending) {
 				String amount = readResponse.getAmount();
 				String deduct = accountService.deductBalance(readResponse.getSendingAccountNumber(), amount);
-
-				if (readResponse.getReceivingRounting().equals(BANK_ROUTING_NUMBER)
-						&& !deduct.equals(AccountService.CURRENT_BALANCE_IS_NOT_ENOUGH)) {
-					accountService.addBalance(readResponse.getReceivingAccountNumber(), amount);
-				} else {
+				
+				if (deduct.equals(AccountService.CURRENT_BALANCE_IS_NOT_ENOUGH)) {
 					return AccountService.CURRENT_BALANCE_IS_NOT_ENOUGH;
+				}
+
+				if (readResponse.getReceivingRounting().equals(BANK_ROUTING_NUMBER)) {
+					accountService.addBalance(readResponse.getReceivingAccountNumber(), amount);
 				}
 
 				return updateTransactionStatus(transactionID, "Completed");
