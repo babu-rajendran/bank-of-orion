@@ -39,7 +39,7 @@ public class UserOperation {
 			return null;
 		}
 	}
-	
+
 	public List<Transaction> getTransactionsWithAcctNum(String acctNum) {
 		try {
 			return transactionService.getTransactionsWithAcctNum(acctNum);
@@ -48,7 +48,7 @@ public class UserOperation {
 			e.printStackTrace();
 			return null;
 		}
-	} 
+	}
 
 	public Transaction getTransactionWithID(String transactionID) {
 		try {

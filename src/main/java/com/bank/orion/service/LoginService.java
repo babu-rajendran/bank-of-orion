@@ -27,12 +27,11 @@ public class LoginService {
 			return null;
 		}
 
-		AccountHolder user = listResponse.get(0);
-		if (CollectionUtils.isEmpty(listResponse) || !user.getAccountPass().equals(accountPass)) {
+		if (CollectionUtils.isEmpty(listResponse) || !listResponse.get(0).getAccountPass().equals(accountPass)) {
 			return null;
 		}
 
-		return user;
+		return listResponse.get(0);
 	}
 
 }

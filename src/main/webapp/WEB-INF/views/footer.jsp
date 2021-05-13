@@ -3,6 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+
 <div class="container-fluid">
 	<footer
 		class="footer pt-3 bg-dark fixed-bottom justify-content-left">
